@@ -50,6 +50,9 @@ public class NetKeyWindow extends JFrame {
         mListener = new NetKeyListener(team, port);
         addKeyListener(mListener);
 
+        // TODO: Make is connected label update
+        add(new JLabel("Connected: " + mListener.isConnected()));
+
         // Set Visible
         setVisible(true);
     }
