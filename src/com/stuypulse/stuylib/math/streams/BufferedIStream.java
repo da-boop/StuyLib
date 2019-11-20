@@ -7,15 +7,15 @@ import java.util.ArrayList;
 /**
  * This class allows you to use an input stream
  * while recording the last N values from the stream
- * 
- * It extends from IStream, so it also workes with 
+ *
+ * It extends from IStream, so it also workes with
  * the existing IStream classes
- * 
+ *
  * @author Kevin (kc16777216@gmail.com)
  * @author Sam (sam.belliveau@gmail.com)
  */
 public class BufferedIStream implements IStream {
-    
+
     /**
      * Default size of the buffer in BufferedIStream
      */
@@ -26,14 +26,15 @@ public class BufferedIStream implements IStream {
      * and stores the last n values in an array list
      */
     private int mSize;
-    private ArrayList<Double> mBuffer;
+    private int ptr = 0;
+    private Double[] mBuffer;
 
     /**
      * The input stream that is buffered. This class
      * is effectivly passed through get()
      */
     private IStream mIStream;
-    
+
     /**
      * Creates a buffered istream with an istream and a custom buffer size
      * @param istream istream that will be buffered
@@ -41,7 +42,7 @@ public class BufferedIStream implements IStream {
      */
     public BufferedIStream(IStream istream, int size) {
         mSize = size;
-        mBuffer = new ArrayList<Double>();
+        mBuffer = new Double[mSize];
         mIStream = istream;
     }
 
@@ -58,11 +59,8 @@ public class BufferedIStream implements IStream {
      * @param value value to be added to buffer
      */
     private void addToBuffer(double value) {
-        mBuffer.add(value);
-
-        while(mBuffer.size() > mSize) {
-            mBuffer.remove(0);
-        }
+        mBuffer[ptr++] = value;
+        ptr %= mSize;
     }
 
     /**
@@ -71,7 +69,7 @@ public class BufferedIStream implements IStream {
      */
     public double get() {
         double value = mIStream.get();
-        this.addToBuffer(value);
+        addToBuffer(value);
         return value;
     }
 
@@ -89,8 +87,7 @@ public class BufferedIStream implements IStream {
      * @return the value of that spot in the buffer
      */
     public double last(int delta) {
-        delta = Math.min(Math.max(delta, 0), mBuffer.size() - 1);
-        return mBuffer.get((mBuffer.size() - 1) - delta);
+        return mBuffer[(ptr-delta)%mSize];
     }
 
     /**
@@ -109,4 +106,3 @@ public class BufferedIStream implements IStream {
         mSize = size;
     }
 }
-
