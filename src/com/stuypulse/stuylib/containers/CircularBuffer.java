@@ -1,17 +1,14 @@
 package com.stuypulse.stuylib.containers;
 
 import java.util.AbstractCollection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ArrayDeque;
 import java.util.Iterator;
 
 public class CircularBuffer<T> extends AbstractCollection<T>{
-    private static class CircularBufferIterator<T> implements Iterator<T>{
+    public class CircularBufferIterator<T> implements Iterator<T>{
         private CircularBuffer<T> ref;
         int start;
         int end;
-        private CircularBufferIterator(CircularBuffer<T> buf){
+        public CircularBufferIterator(CircularBuffer<T> buf){
             ref = buf;
             start = ref.head;
             end = ref.head+ref.mSize;
