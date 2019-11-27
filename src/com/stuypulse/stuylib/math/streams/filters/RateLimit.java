@@ -15,11 +15,15 @@ public class RateLimit implements IStreamFilter {
     private double mRateLimit; // Stores max rate limit
 
     /**
-     * Makes a new rate limiter with 
-     * specified rate limit
+     * Makes a new rate limiter with specified rate limit
+     * 
      * @param rateLimit desired rate limit
      */
-    public RateLimit(double rateLimit) {
+    public RateLimit(double rateLimit) throws RuntimeException {
+        if(rateLimit <= 0) {
+            throw new RuntimeException("RateLimit(double rateLimit) -> rateLimit must be greater than 0!");
+        }
+
         mLastValue = 0;
         mRateLimit = rateLimit;
     }
