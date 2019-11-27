@@ -1,8 +1,7 @@
 package com.stuypulse.stuylib.math.streams;
 
 import com.stuypulse.stuylib.math.streams.IStream;
-
-import edu.wpi.first.wpilibj.CircularBuffer;
+import com.stuypulse.stuylib.containers.CircularBuffer;
 
 /**
  * This class allows you to use an input stream while recording the last N
@@ -25,7 +24,7 @@ public class BufferedIStream implements IStream {
      * Stores the number of elements in the stream buffer, and stores the last n
      * values in a circular buffer
      */
-    private CircularBuffer mBuffer;
+    private CircularBuffer<Double> mBuffer;
 
     /**
      * The input stream that is buffered. This class is effectively passed through
@@ -40,11 +39,11 @@ public class BufferedIStream implements IStream {
      * @param size    size of buffer
      */
     public BufferedIStream(IStream istream, int size) {
-        mBuffer = new CircularBuffer(size);
+        mBuffer = new CircularBuffer<Double>(size);
         mIStream = istream;
 
         for (int i = 0; i < size; ++i) {
-            mBuffer.addFirst(0.0);
+            mBuffer.add(0.0);
         }
     }
 
@@ -64,7 +63,7 @@ public class BufferedIStream implements IStream {
      */
     public double get() {
         double value = mIStream.get();
-        mBuffer.addFirst(value);
+        mBuffer.add(value);
         return value;
     }
 
@@ -74,7 +73,7 @@ public class BufferedIStream implements IStream {
      * @return most recent value from the istream
      */
     public double last() {
-        return last(0);
+        return mBuffer.getTail();
     }
 
     /**
@@ -84,6 +83,6 @@ public class BufferedIStream implements IStream {
      * @return the value of that spot in the buffer
      */
     public double last(int delta) {
-        return mBuffer.get(delta);
+        return mBuffer.get(mBuffer.size() - 1 - delta);
     }
 }
