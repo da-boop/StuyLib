@@ -1,7 +1,14 @@
-package com.stuypulse.stuylib.math.streams;
+package com.stuypulse.stuylib.streams;
 
+<<<<<<< HEAD:src/com/stuypulse/stuylib/math/streams/BufferedIStream.java
 import com.stuypulse.stuylib.math.streams.IStream;
 import com.stuypulse.stuylib.containers.CircularBuffer;
+=======
+import com.stuypulse.stuylib.streams.IStream;
+import com.stuypulse.stuylib.exception.ConstructionError;
+
+import edu.wpi.first.wpilibj.CircularBuffer;
+>>>>>>> master:src/com/stuypulse/stuylib/streams/BufferedIStream.java
 
 /**
  * This class allows you to use an input stream while recording the last N
@@ -38,7 +45,11 @@ public class BufferedIStream implements IStream {
      * @param istream istream that will be buffered
      * @param size    size of buffer
      */
-    public BufferedIStream(IStream istream, int size) {
+    public BufferedIStream(IStream istream, int size) throws ConstructionError {
+        if (size <= 0) {
+            throw new ConstructionError("BufferedIStream(IStream istream, int size)", "size must be greater than 0!");
+        }
+
         mBuffer = new CircularBuffer<Double>(size);
         mIStream = istream;
 
